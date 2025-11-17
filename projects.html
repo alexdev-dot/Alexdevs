@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects - AlexDevs</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- FontAwesome for icons -->
+
+</head>
+<body><!-- Header / Navbar -->
+  <header>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html" >About</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="projects">
+        <h2>My Projects</h2>
+        <p>Here are some of the projects I’ve worked on:</p>
+
+        <div class="projects-grid">
+            <div class="project-card">
+            <img src="" alt="project 1">
+            <div class="project-content">
+                <h3>Coming soon...</h3>
+                <p>Am working on</p>
+
+                <!-- Technologies used -->
+                 <div class="project-tech">
+                  <p>Technologies used:</p><br>
+                  <i class="devicon-html5-plain colored" title="HTML5"></i>
+                  <i class="devicon-css3-plain colored" title="CSS3"></i>
+                  <i class="devicon-javascript-plain colored" title="JavaScript"></i>
+                </div><br>
+                <a href="#" class="btn">View Project</a>
+            </div>
+            </div>
+
+            <div class="project-card">
+            <img src="" alt="project 2">
+            <div class="project-content">
+                <h3>Coming soon...</h3>
+                <p>Still working on them.</p>
+
+                <!-- Technologies used -->
+                 <div class="project-tech">
+                  <p>Technologies used:</p><br>
+                  <i class="devicon-html5-plain colored" title="HTML5"></i>
+                  <i class="devicon-css3-plain colored" title="CSS3"></i>
+                  <i class="devicon-javascript-plain colored" title="JavaScript"></i>
+                </div><br>
+
+                <a href="#" class="btn">View Project</a><br><br><br><br>
+            </div>
+            </div>
+        </div>
+        </section>
+
+ 
+
+
+  <!-- Footer (same as index.html) -->
+  <footer>
+  <div class="footer-container">
+    <h3>AlexDevs</h3>
+    <p>Creating impactful digital solutions through code, creativity, and continuous learning.</p>
+
+    <div class="footer-socials">
+      <h4>Follow Us:</h4><br>
+      <a href="https://github.com/alexdev-dot" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/alex-kariuki-751a30345/" target="_blank"rel="noopener noreferrer"  aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="https://www.tiktok.com/@alex.dev006" target="_blank"rel="noopener noreferrer"  aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.youtube.com/@PrinceArrow-25" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      <a href="https://wa.me/0117411547" target="_blank"rel="noopener noreferrer"  aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a href="mailto:alexkariuki999@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email"><i class="fas fa-envelope"></i></a>
+    </div>
+
+    <hr>
+
+    <p class="footer-copy">&copy; 2025 <span>AlexDevs</span> | All Rights Reserved.</p>
+  </div>
+</footer>
+
+<!-- JS for scroll-trigger animation -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const projectCards = document.querySelectorAll('.project-card');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.3 });
+
+  projectCards.forEach(card => observer.observe(card));
+});
+</script>
+
+<!-- js for the footer-->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const footer = document.querySelector('.footer-container');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(footer);
+});
+</script>
+</body>
+</html>

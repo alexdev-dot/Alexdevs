@@ -1,0 +1,135 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background: #ffffff;
+    padding: 20px 40px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: #007bff;
+}
+
+/* Buttons */
+.header-buttons .btn {
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: 0.3s;
+}
+
+.login-btn {
+    background: #007bff;
+    color: white;
+}
+
+.register-btn {
+    background: #28a745;
+    color: white;
+}
+
+.header-buttons .btn:hover {
+    opacity: 0.85;
+}
+
+/* Policy / Terms Pages */
+.policy-container {
+    max-width: 900px;
+    background: white;
+    margin: 40px auto;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+}
+
+.policy-container h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.policy-container h3 {
+    font-size: 20px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.policy-container p {
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.policy-container ul {
+    margin: 10px 0 20px 25px;
+}
+
+.policy-container ul li {
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 25px;
+    background: #ffffff;
+    border-top: 1px solid #ddd;
+    margin-top: 40px;
+    color: #555;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .policy-container {
+        padding: 25px 20px;
+        margin: 20px;
+    }
+}
