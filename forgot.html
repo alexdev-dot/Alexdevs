@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forgot Password</title>
+  <link rel="stylesheet" href="forgot.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+  <!-- Back to login -->
+  <a href="login.html" class="back-arrow" title="Go back to login">
+    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+  </a>
+
+  <div class="background"></div>
+  <div class="container">
+    <form id="forgotForm" class="glass-card" autocomplete="on" novalidate>
+      <h2>Forgot Password</h2>
+      <p>Enter your email to reset your password</p>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="your@example.com" required />
+
+      <button type="submit">Send Reset Link</button>
+
+      <div class="footer">
+        <p>Remembered your password? <a href="login.html">Login</a></p>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const forgotForm = document.getElementById('forgotForm');
+    forgotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+
+      // Example: Send request to backend (create /forgot-password route)
+      const response = await fetch('http://localhost:5000/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await response.json();
+      alert(data.msg || 'If this email exists, a reset link has been sent!');
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Me - AlexDevs</title>
+  <link rel="stylesheet" href="style.css"> <!-- Same CSS as index -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header>
+        <h1 class="logo">AlexDevs</h1>
+         
+        <!-- Hamburger Icon -->
+        <div class="mobile-menu-icon" id="menuToggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="nav-links" id="mobileMenu" aria-label="Main navigation">
+            <ul>
+                <li><a href="index.html#hero" aria-label="Home section">Home</a></li>
+                <li><a href="index.html" arial-label="About section">About</a></li>
+                <li><a href="index.html" aria-label="Skills section">Skills</a></li>
+                <li><a href="index.html" aria-label="Projects section">Projects</a></li>
+                <li><a href="index.html" arial-label="Mission section">Mission</a></li>
+                <li><a href="index.html" aria-label="Contact section">Contact</a></li>
+            </ul>
+
+            <!-- Login/Register buttons -->
+            <div class="header-buttons">
+              <a href="login.html" class="btn login-btn">Login</a>
+              <a href="register.html" class="btn register-btn">Register</a>
+            </div>
+
+        </nav>
+    </header>
+
+
+  <!-- About Section -->
+  <section class="about-section">
+    <div class="about-container">
+      
+      <!-- Text-->
+      <div class="about-text">
+        <h1>About Me</h1>
+        <p>Hello! I'm <strong>Alex</strong>, a  Computer Science student at Zetech University. I have a strong passion for software and web development, especially frontend development. I enjoy learning new technologies, building projects, and solving challenging problems.</p>
+        <p>Over time, I've focused on enhancing my skills in HTML, CSS, JavaScript, and exploring frameworks like React. My goal is to create functional, clean, and visually appealing digital experiences. I’m also exploring backend development, as I find the space exciting and full of innovation opportunities.</p>
+        <p>Beyond coding, I enjoy analyzing problems creatively, learning from real-world projects, and continuously improving my technical knowledge. I aim to build projects that not only work efficiently but also make a positive impact for users.</p>
+        <p>Connect with me on <a href="https://www.linkedin.com/in/alex-kariuki-751a30345/" target="_blank" rel="noopener noreferrer">LinkedIn</a> or check my work on <a href="https://github.com/alexdev-dot" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+      </div>
+    </div>
+  </section>
+
+    <!-- Footer (same as index.html) -->
+  <footer>
+  <div class="footer-container">
+    <h3>AlexDevs</h3>
+    <p>Creating impactful digital solutions through code, creativity, and continuous learning.</p>
+
+    <div class="footer-socials">
+      <h4>Follow Us:</h4><br>
+      <a href="https://github.com/alexdev-dot" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/alex-kariuki-751a30345/" target="_blank"rel="noopener noreferrer"  aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="https://www.tiktok.com/@alex.dev006" target="_blank"rel="noopener noreferrer"  aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.youtube.com/@PrinceArrow-25" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      <a href="https://wa.me/0117411547" target="_blank"rel="noopener noreferrer"  aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a href="mailto:alexkariuki999@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email"><i class="fas fa-envelope"></i></a>
+    </div>
+
+    <hr>
+
+    <p class="footer-copy">&copy; 2025 <span>AlexDevs</span> | All Rights Reserved.</p>
+
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+  </div>
+</footer>
+<!-- JS for mobile menu-->
+<script>
+const menuToggle = document.getElementById("menuToggle");
+const mobileMenu = document.getElementById("mobileMenu");
+
+menuToggle.addEventListener("click", () => {
+    mobileMenu.classList.toggle("active");
+    menuToggle.classList.toggle("active");
+});
+</script>
+
+<!-- js for the footer-->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const footer = document.querySelector('.footer-container');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(footer);
+});
+</script>
+</body>
+</html>
+

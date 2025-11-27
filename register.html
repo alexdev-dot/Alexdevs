@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Glass UI</title>
+    <link rel="stylesheet" href="register.css" />
+  </head>
+  <body>
+    
+    <!-- Back Arrow -->
+    <a href="index.html" class="back-arrow" title="Go back to Home">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    
+    <div class="background"></div>
+    <div class="container">
+      <form id="registerForm" class="glass-card" autocomplete="on" novalidate>
+        <h2>Create Account</h2>
+        <p>Join us and start your journey</p>
+          
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" placeholder="John Doe" required />
+        
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" required />
+        
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="........" required />
+        
+        <button type="submit">Register</button>
+        
+        <!-- Google Register Button -->
+        <div 
+          id="g_id_onload"
+          data-client_id="1019512196971-fpvp8ae7de9pni2q8lk314t4a7qbct55.apps.googleusercontent.com"
+          data-context="signup"
+          data-ux_mode="popup"
+          data-callback="handleCredentialResponse"
+          data-auto_prompt="false">
+        </div>
+
+        <div class="g_id_signin" data-type="standard"></div>
+
+        <!-- Footer -->
+        <div class="footer">
+          <p>Already have an account? <a href="login.html">Login</a></p>
+        </div>
+      </form>
+    </div>
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+    // Normal registration
+    const registerForm = document.getElementById('registerForm');
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('fullname').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const gender = document.getElementById('gender').value;
+
+      const response = await fetch('http://localhost:5000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, gender })
+      });
+
+      const data = await response.json();
+      alert(data.msg || 'Registered successfully!');
+    });
+
+    // Google registration
+    function handleGoogleRegister(response) {
+      fetch('http://localhost:5000/google-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: response.credential })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.token){
+          localStorage.setItem('token', data.token);
+          alert(`Welcome ${data.user.name}`);
+          window.location.href = 'dashboard.html';
+        } else {
+          alert(data.msg || 'Google signup failed');
+        }
+      });
+    }
+  </script>
+
+  </body>
+</html>
