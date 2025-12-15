@@ -1,0 +1,251 @@
+/*==============================
+    RESET
+==============================*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #0f0f0f;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+/*==============================
+    HEADER
+==============================*/
+header {
+  background: #111;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+
+header h1.logo {
+  font-size: 26px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #00ffff, #ff00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+.nav-links ul li a {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-links ul li a:hover {
+  color: #00ffff;
+}
+
+.header-buttons .btn {
+  padding: 8px 15px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+}
+
+.login-btn {
+  background: #00ffff;
+  color: #000;
+}
+
+.login-btn:hover {
+  background: #0ff;
+  transform: translateY(-2px);
+}
+
+.register-btn {
+  background: #ff00ff;
+  color: #fff;
+}
+
+.register-btn:hover {
+  background: #f0f;
+  transform: translateY(-2px);
+}
+
+/* MOBILE MENU */
+.mobile-menu-icon {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+}
+
+.mobile-menu-icon span {
+  width: 25px;
+  height: 3px;
+  background: #00ffff;
+  display: block;
+  border-radius: 3px;
+}
+
+/* Mobile nav (hidden by default) */
+.nav-links.mobile {
+  display: none;
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  flex-direction: column;
+  gap: 15px;
+  width: 220px;
+  z-index: 100;
+}
+
+.nav-links.mobile.active {
+  display: flex;
+}
+
+.nav-links.mobile ul {
+  flex-direction: column;
+  gap: 15px;
+}
+
+.nav-links.mobile .header-buttons {
+  flex-direction: column;
+}
+
+/*==============================
+    POLICY CONTAINER
+==============================*/
+.policy-container {
+  max-width: 900px;
+  background: rgba(20,20,20,0.95);
+  margin: 50px auto;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(0,255,255,0.2), 0 0 25px rgba(255,0,255,0.2);
+  color: #ccc;
+}
+
+.policy-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  background: linear-gradient(90deg, #00ffff, #ff00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.policy-container h3 {
+  font-size: 1.5rem;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.policy-container p, 
+.policy-container ul li {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.policy-container ul {
+  margin-left: 25px;
+}
+
+/*==============================
+    FOOTER
+==============================*/
+footer {
+  background: #111;
+  padding: 35px 20px;
+  color: #ccc;
+  text-align: center;
+  position: relative;
+}
+
+.footer-container h3 {
+  font-size: 1.8rem;
+  background: linear-gradient(90deg, #00ffff, #ff00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.footer-socials {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.footer-socials a {
+  color: #00ffff;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.footer-socials a:hover {
+  color: #ff00ff;
+  transform: translateY(-3px);
+}
+
+footer hr {
+  margin: 20px 0;
+  border: 0.5px solid #333;
+}
+
+footer .footer-copy {
+  margin-bottom: 10px;
+}
+
+/*==============================
+    RESPONSIVE
+==============================*/
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .mobile-menu-icon {
+    display: flex;
+  }
+
+  .policy-container {
+    padding: 30px 20px;
+    margin: 20px;
+  }
+}

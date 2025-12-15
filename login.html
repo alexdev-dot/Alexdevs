@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="login.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+<body>
+  <!-- Back to home button -->
+  <a href="index.html" class="back-arrow" title="Go back to home">
+    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+  </a>
+
+  <div class="background"></div>
+  <div class="container">
+    <!-- LOGIN FORM -->
+    <form id="loginForm" class="glass-card" autocomplete="on" novalidate>
+      <h2>Welcome Back</h2>
+      <p>Please login to your account</p>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="your@example.com" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="........" required />
+
+      <button type="submit">Login</button>
+
+      <p><a href="forgot.html">Forgot your password?</a></p>
+
+      <!-- Google Login -->
+      <div id="g_id_onload_login"
+           data-client_id="1019512196971-fpvp8ae7de9pni2q8lk314t4a7qbct55.apps.googleusercontent.com"
+           data-context="signin"
+           data-ux_mode="popup"
+           data-callback="handleCredentialResponse"
+           data-auto_prompt="false"></div>
+      <div class="google-btn-wrapper">
+        <button type="button" class="google-btn-custom">
+          <i class="fa fa-google"></i> Login with Google
+        </button>
+        <div class="g_id_signin" data-type="standard" data-size="large" data-width="400"></div>
+      </div>
+
+      <div class="footer">
+        <p>Don’t have an account? <span id="showRegister" class="toggle-link">Register</span></p>
+      </div>
+    </form>
+
+    <!-- REGISTER FORM (Hidden by default) -->
+    <form id="registerForm" class="glass-card hidden" autocomplete="on" novalidate>
+      <h2>Create Account</h2>
+      <p>Join us and start your journey</p>
+
+      <label for="reg_fullname">Full Name</label>
+      <input type="text" id="reg_fullname" placeholder="John Doe" required />
+
+      <label for="reg_email">Email</label>
+      <input type="email" id="reg_email" placeholder="you@example.com" required />
+
+      <label for="reg_password">Password</label>
+      <input type="password" id="reg_password" placeholder="........" required />
+
+      <button type="submit">Register</button>
+
+      <!-- Google Register -->
+      <div id="g_id_onload_register"
+           data-client_id="1019512196971-fpvp8ae7de9pni2q8lk314t4a7qbct55.apps.googleusercontent.com"
+           data-context="signup"
+           data-ux_mode="popup"
+           data-callback="handleCredentialResponse"
+           data-auto_prompt="false"></div>
+      <div class="google-btn-wrapper">
+        <button type="button" class="google-btn-custom">
+          <i class="fa fa-google"></i> Register with Google
+        </button>
+        <div class="g_id_signin" data-type="standard" data-size="large"></div>
+      </div>
+
+      <div class="footer">
+        <p>Already have an account? <span id="showLogin" class="toggle-link">Login</span></p>
+      </div>
+    </form>
+  </div>
+
+  <!-- Google Script -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    // Toggle Logic
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const showRegister = document.getElementById('showRegister');
+    const showLogin = document.getElementById('showLogin');
+
+    showRegister.addEventListener('click', () => {
+      loginForm.classList.add('hidden');
+      registerForm.classList.remove('hidden');
+    });
+
+    showLogin.addEventListener('click', () => {
+      registerForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+    });
+
+    // Login Handler
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      try {
+        const response = await fetch('http://localhost:5000/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+          alert(`Welcome ${data.user.name}`);
+          window.location.href = 'dashboard.html';
+        } else {
+          alert(data.msg || 'Login failed');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('An error occurred. Please try again.');
+      }
+    });
+
+    // Register Handler
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('reg_fullname').value;
+      const email = document.getElementById('reg_email').value;
+      const password = document.getElementById('reg_password').value;
+      try {
+        const response = await fetch('http://localhost:5000/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        });
+        const data = await response.json();
+        if (data.token || response.ok) {
+          alert(data.msg || 'Registered successfully! Please login.');
+          // Switch to login view
+          registerForm.classList.add('hidden');
+          loginForm.classList.remove('hidden');
+        } else {
+          alert(data.msg || 'Registration failed');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('An error occurred. Please try again.');
+      }
+    });
+
+    // Google Handler (Shared)
+    function handleCredentialResponse(response) {
+      fetch('http://localhost:5000/google-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: response.credential })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.token) {
+            localStorage.setItem('token', data.token);
+            alert(`Welcome ${data.user.name}`);
+            window.location.href = 'dashboard.html';
+          } else {
+            alert(data.msg || 'Google login/signup failed');
+          }
+        });
+    }
+  </script>
+  <style>
+    .hidden { display: none !important; }
+    .toggle-link { color: #fff; text-decoration: underline; font-weight: bold; cursor: pointer; }
+    .toggle-link:hover { color: #ddd; }
+  </style>
+</body>
+</html>
