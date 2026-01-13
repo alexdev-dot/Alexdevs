@@ -1,111 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <style>
-    /* Global styles */
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | AlexDevs</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #2a5298;
+        --secondary: #1e3c72;
+        --accent: #4facfe;
+        --bg: #0f172a;
+        --card-bg: rgba(30, 41, 59, 0.7);
+        --text: #f8fafc;
+      }
 
-    .container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
-      border-radius: 12px;
-      padding: 2rem 3rem;
-      width: 90%;
-      max-width: 800px;
-      text-align: center;
-      animation: fadeIn 1s ease-out forwards;
-    }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+      }
 
-    h1 {
-      margin-bottom: 0.5rem;
-      font-size: 2.5rem;
-      animation: slideDown 0.8s ease-out forwards;
-    }
+      /* Sidebar */
+      .sidebar {
+        width: 250px;
+        height: 100vh;
+        background: var(--secondary);
+        padding: 2rem 1rem;
+        position: fixed;
+      }
 
-    p {
-      margin-top: 0;
-      font-size: 1.2rem;
-      opacity: 0.9;
-    }
+      .sidebar h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.5rem;
+        color: var(--accent);
+      }
 
-    .btn {
-      margin-top: 2rem;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      color: #fff;
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .btn:hover {
-      background: rgba(255, 255, 255, 0.35);
-      transform: translateY(-3px);
-    }
+      .nav-item {
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: 0.3s;
+      }
 
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes slideDown {
-      from { transform: translateY(-30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
+      .nav-item:hover,
+      .nav-item.active {
+        background: rgba(255, 255, 255, 0.1);
+      }
 
-    /* Simple icon animation */
-    .welcome-icon {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      animation: rotate 4s linear infinite;
-    }
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <i class="fa fa-star welcome-icon"></i>
-    <h1>Welcome to Your Dashboard</h1>
-    <p>You have successfully logged in. Explore your personalized content.</p>
-    <button class="btn" id="logoutBtn">Log Out</button>
-  </div>
+      /* Main Content */
+      .main-content {
+        margin-left: 250px;
+        padding: 2rem;
+        width: calc(100% - 250px);
+      }
 
-  <script>
-    // Simple logout – clear token and redirect to login page
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('token');
-      window.location.href = 'login.html';
-    });
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
 
-    // Optional: greet user by name if token contains it (pseudo‑decode)
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const name = payload.name || payload.user?.name || '';
-        if (name) {
-          document.querySelector('h1').textContent = `Welcome, ${name}`;
+      /* Project Form */
+      .project-form {
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+      }
+
+      input,
+      textarea {
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        color: white;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: white;
+      }
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+      }
+
+      /* Projects List */
+      .projects-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--card-bg);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      th {
+        background: rgba(255, 255, 255, 0.05);
+        font-weight: 600;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      /* RESPONSIVE DASHBOARD */
+      @media (max-width: 992px) {
+        .sidebar {
+          width: 80px;
+          padding: 2rem 0.5rem;
         }
-      } catch (e) { /* ignore malformed token */ }
-    }
-  </script>
-</body>
+        .sidebar h2 {
+          display: none;
+        }
+        .nav-item {
+          justify-content: center;
+        }
+        .nav-item span {
+          display: none;
+        }
+        .main-content {
+          margin-left: 80px;
+          width: calc(100% - 80px);
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          flex-direction: column;
+        }
+        .sidebar {
+          width: 100%;
+          height: auto;
+          position: relative;
+          padding: 1rem;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+        }
+        .sidebar h2 {
+          display: block;
+          margin: 0;
+          font-size: 1.2rem;
+        }
+        .main-content {
+          margin-left: 0;
+          width: 100%;
+          padding: 1rem;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+        .projects-table {
+          font-size: 0.85rem;
+        }
+      }
+
+      .badge {
+        background: #ef4444;
+        color: white;
+        border-radius: 999px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        margin-left: 8px;
+      }
+      .new-row {
+        animation: highlight 2s;
+      }
+      @keyframes highlight {
+        0% {
+          background: rgba(79, 172, 254, 0.2);
+        }
+        100% {
+          background: transparent;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <h2>Admin Panel</h2>
+      <div class="nav-item active" onclick="showSection('projects', this)">
+        <i class="fas fa-project-diagram"></i> <span>Projects</span>
+      </div>
+      <div class="nav-item" onclick="showSection('messages', this)">
+        <i class="fas fa-envelope"></i> <span>Messages</span>
+      </div>
+      <div class="nav-item" onclick="showSection('subscribers', this)">
+        <i class="fas fa-paper-plane"></i>
+        <span>Subscribers <span id="subBadge" class="badge">0</span></span>
+      </div>
+      <div class="nav-item" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="header">
+        <h1>Project Management</h1>
+        <span id="adminName">Admin</span>
+      </div>
+
+      <!-- Add Project Form -->
+      <div class="project-form">
+        <h3 id="formTitle">Add New Project</h3>
+        <form id="projectForm">
+          <input type="hidden" id="projectId" />
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Title</label>
+              <input
+                type="text"
+                id="title"
+                required
+                title="Project title"
+                placeholder="Project title"
+              />
+            </div>
+            <div class="form-group">
+              <label>Image Upload</label>
+              <input
+                type="file"
+                id="imageUpload"
+                accept="image/*"
+                title="Upload an image (optional)"
+              />
+              <label class="image-fallback-label"
+                >Or Image URL (Fallback)</label
+              >
+              <input
+                type="text"
+                id="image"
+                placeholder="https://..."
+                title="Image URL (fallback)"
+              />
+            </div>
+            <div class="form-group">
+              <label>Link</label>
+              <input
+                type="text"
+                id="link"
+                required
+                title="Project link"
+                placeholder="https://example.com"
+              />
+            </div>
+            <div class="form-group">
+              <label>Tech (comma separated)</label>
+              <input
+                type="text"
+                id="tech"
+                placeholder="HTML, CSS, JS"
+                title="Tech stack (comma separated)"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea
+              id="description"
+              rows="3"
+              required
+              title="Project description"
+              placeholder="Short project description"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            Save Project
+          </button>
+          <button type="button" class="btn btn-cancel" id="cancelBtn">
+            Cancel
+          </button>
+        </form>
+      </div>
+
+      <!-- Projects List (shown by default) -->
+      <div id="projectsSection">
+        <table class="projects-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Tech</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="projectsList">
+            <!-- Projects will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Messages Section (Initially Hidden) -->
+      <div id="messagesSection" class="hidden">
+        <h3>Inbox</h3>
+        <table class="projects-table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Message</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="messagesList">
+            <!-- Messages will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Subscribers Section (Initially Hidden) -->
+      <div id="subscribersSection" class="hidden">
+        <h3>Subscribers</h3>
+        <table class="projects-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="subscribersList">
+            <!-- Subscribers will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Reply Modal is simple for now, can be styled better -->
+      <dialog id="replyModal" class="reply-modal">
+        <h3 class="modal-title">Reply to Message</h3>
+        <form id="replyForm">
+          <input type="hidden" id="replyId" />
+          <input type="hidden" id="replyEmail" />
+          <div class="form-group">
+            <label>Subject</label>
+            <input
+              type="text"
+              id="replySubject"
+              value="Re: Your Inquiry"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="replyMessage" rows="5" required></textarea>
+          </div>
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="btn btn-modal-cancel"
+              onclick="document.getElementById('replyModal').close()"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">Send Reply</button>
+          </div>
+        </form>
+      </dialog>
+    </main>
+
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script src="dashboard.js"></script>
+  </body>
 </html>

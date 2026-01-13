@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Register</title>
-  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="login.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 </head>
 <body>
@@ -13,10 +13,14 @@
     <i class="fa fa-arrow-left" aria-hidden="true"></i>
   </a>
 
+
   <div class="background"></div>
   <div class="container">
     <!-- REGISTER FORM -->
     <form id="registerForm" class="glass-card" autocomplete="on" novalidate>
+      <div class="form-logo">
+        <a href="admin.html"><img src="logo.png" alt="Admin Access" style="width: 50px; margin-bottom: 10px;"></a>
+      </div>
       <h2>Create Account</h2>
       <p>Join us and start your journey</p>
 
@@ -27,18 +31,16 @@
       <input type="email" id="reg_email" placeholder="you@example.com" required />
 
       <label for="reg_password">Password</label>
-      <input type="password" id="reg_password" placeholder="........" required />
+      <div class="password-wrapper">
+        <input type="password" id="reg_password" placeholder="........" required />
+        <i class="fa fa-eye toggle-password" id="toggleRegPasswordBtn"></i>
+      </div>
 
       <button type="submit">Register</button>
 
       <!-- Google Register -->
-      <div id="g_id_onload_register"
-           data-client_id="1019512196971-fpvp8ae7de9pni2q8lk314t4a7qbct55.apps.googleusercontent.com"
-           data-context="signup"
-           data-ux_mode="popup"
-           data-callback="handleCredentialResponse"
-           data-auto_prompt="false"></div>
-      <div class="g_id_signin" data-type="standard" data-theme="outline" data-text="signup_with" data-size="large"></div>
+      <!-- Google Register Container -->
+      <div id="google-register-btn-container" class="g_id_signin" style="justify-content: center; display: flex; margin-top: 15px;"></div>
 
       <div class="footer">
         <p>Already have an account? <a href="login.html" class="toggle-link">Login</a></p>
@@ -48,52 +50,7 @@
 
   <!-- Google Script -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script>
-    // Register Handler
-    const registerForm = document.getElementById('registerForm');
-    registerForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('reg_fullname').value;
-      const email = document.getElementById('reg_email').value;
-      const password = document.getElementById('reg_password').value;
-      try {
-        const response = await fetch('http://localhost:5000/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password })
-        });
-        const data = await response.json();
-        if (data.token || response.ok) {
-          alert(data.msg || 'Registered successfully! Please login.');
-          window.location.href = 'dashboard.html';
-        } else {
-          alert(data.msg || 'Registration failed');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('An error occurred. Please try again.');
-      }
-    });
-
-    // Google Handler (Shared)
-    function handleCredentialResponse(response) {
-      fetch('http://localhost:5000/google-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: response.credential })
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.token) {
-            localStorage.setItem('token', data.token);
-            alert(`Welcome ${data.user.name}`);
-            window.location.href = 'dashboard.html';
-          } else {
-            alert(data.msg || 'Google login/signup failed');
-          }
-        });
-    }
-  </script>
+  <script src="register.js" defer></script>
   <style>
     .toggle-link { color: #fff; text-decoration: underline; font-weight: bold; cursor: pointer; }
     .toggle-link:hover { color: #ddd; }

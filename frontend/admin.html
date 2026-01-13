@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login | AlexDevs</title>
+  <link rel="stylesheet" href="login.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+<body>
+  <!-- Back to home button -->
+  <a href="index.html" class="back-arrow" title="Go back to home">
+    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+  </a>
+
+
+  <div class="background"></div>
+  <div class="container">
+    <form id="adminLoginForm" class="glass-card" autocomplete="on" novalidate>
+      <!-- Honeypot Field for basic bot protection -->
+      <div style="display:none;">
+        <input type="text" id="admin_username_field" name="admin_username_field" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="form-logo" style="margin-bottom: 30px;">
+        <div class="shield-container" style="display: inline-flex; position: relative; justify-content: center; align-items: center;">
+          <i class="fa fa-shield" style="font-size: 60px; color: #00ffff; filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));"></i>
+          <i class="fa fa-lock" style="position: absolute; font-size: 20px; color: #0f172a; top: 22px;"></i>
+        </div>
+      </div>
+
+      <div class="admin-header" style="text-align: center; margin-bottom: 30px;">
+        <h2 style="font-size: 2rem; margin-bottom: 5px; letter-spacing: 1px;">Terminal Access</h2>
+        <div style="height: 3px; width: 50px; background: #00ffff; margin: 0 auto 15px; border-radius: 2px;"></div>
+        <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Authorized Personnel Only</p>
+      </div>
+
+      <div class="form-group-wrapper" style="text-align: left;">
+        <label for="email" style="display: block; margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #00ffff;">Operator Identity</label>
+        <input type="email" id="email" name="email" placeholder="operator@alexdevs.io" autocomplete="username" required 
+               style="width: 100%; margin-bottom: 20px; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(0,255,255,0.2); color: #fff; outline: none; transition: border 0.3s;"/>
+
+        <label for="password" style="display: block; margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #00ffff;">Access Code</label>
+        <div class="password-wrapper" style="position: relative; margin-bottom: 20px;">
+          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required 
+                 style="width: 100%; padding: 12px; padding-right: 40px; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(0,255,255,0.2); color: #fff; outline: none; transition: border 0.3s;"/>
+          <i class="fa fa-eye toggle-password" id="toggleAdminPasswordBtn" style="position: absolute; right: 12px; top: 14px; cursor: pointer; color: rgba(255,255,255,0.5);"></i>
+        </div>
+
+        <label for="secretKey" style="display: block; margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #00ffff;">Encryption Key</label>
+        <div class="password-wrapper" style="position: relative; margin-bottom: 30px;">
+          <input type="password" id="secretKey" name="secretKey" placeholder="Restricted Key" required 
+                 style="width: 100%; padding: 12px; padding-right: 40px; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(0,255,255,0.2); color: #fff; outline: none; transition: border 0.3s;"/>
+          <i class="fa fa-eye toggle-password" id="toggleSecretKeyBtn" style="position: absolute; right: 12px; top: 14px; cursor: pointer; color: rgba(255,255,255,0.5);"></i>
+        </div>
+      </div>
+
+      <button type="submit" id="submitBtn" style="width: 100%; padding: 14px; border-radius: 8px; border: none; background: #00ffff; color: #0f172a; font-weight: 800; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 2px;">
+        <span class="btn-text">Authenticate</span>
+        <i class="fa fa-spinner fa-spin" id="btnSpinner" style="display: none; margin-left: 10px;"></i>
+      </button>
+      <div id="errorMsg" style="color: #ff4d4d; margin-top: 15px; font-size: 0.85rem; text-align: center; font-family: monospace; min-height: 1.2rem;"></div>
+    </form>
+  </div>
+
+  <script>
+    // Password Visibility Toggle Logic
+    const setupToggle = (btnId, inputId) => {
+      const btn = document.getElementById(btnId);
+      const input = document.getElementById(inputId);
+      if (btn && input) {
+        btn.addEventListener('click', () => {
+          const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+          input.setAttribute('type', type);
+          btn.classList.toggle('fa-eye');
+          btn.classList.toggle('fa-eye-slash');
+        });
+      }
+    };
+
+    setupToggle('toggleAdminPasswordBtn', 'password');
+    setupToggle('toggleSecretKeyBtn', 'secretKey');
+
+    document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const honeypot = document.getElementById('admin_username_field').value;
+      if (honeypot) {
+        console.warn("Bot detected via honeypot.");
+        return; // Silent fail for bots
+      }
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const secretKey = document.getElementById('secretKey').value;
+      const errorMsg = document.getElementById('errorMsg');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const btnText = submitBtn.querySelector('.btn-text');
+
+      // UI Loading State
+      errorMsg.textContent = '';
+      submitBtn.disabled = true;
+      btnSpinner.style.display = 'inline-block';
+      btnText.textContent = 'Verifying...';
+
+      try {
+        // Small strategic delay for "security processing" feel
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        const response = await fetch('http://localhost:5000/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, secretKey })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('adminToken', data.token);
+          window.location.href = 'dashboard.html';
+        } else {
+          errorMsg.textContent = data.msg || 'Access Denied: Invalid Credentials';
+          submitBtn.disabled = false;
+          btnSpinner.style.display = 'none';
+          btnText.textContent = 'Authenticate';
+        }
+      } catch (err) {
+        console.error('Terminal error:', err);
+        errorMsg.textContent = 'Connection Blocked: Server Offline';
+        submitBtn.disabled = false;
+        btnSpinner.style.display = 'none';
+        btnText.textContent = 'Authenticate';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -10,12 +10,15 @@ html {
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow-y: auto;
+  padding: 20px 0;
 }
+
+.hidden { display: none !important; }
 
 .background {
   position: fixed;
@@ -95,10 +98,10 @@ input::placeholder {
 
 button {
   width: 100%;
-  background: linear-gradient(90deg, #00ffff, #0088ff);
-  color: #000;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
   padding: 12px;
-  border: none;
+  border: 1px solid rgba(0, 255, 255, 0.3);
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
@@ -108,8 +111,9 @@ button {
 }
 
 button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
 }
 
 .footer {
