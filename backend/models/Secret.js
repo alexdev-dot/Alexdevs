@@ -1,10 +1,29 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const SecretSchema = new mongoose.Schema({
-  keyId: { type: String, required: true, unique: true },
-  secret: { type: String, required: true },
-  active: { type: Boolean, default: false },
-  createdAt: { type: Date, default: Date.now }
+const Secret = sequelize.define('Secret', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  keyId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  },
+  secret: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  active: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  }
 });
 
-module.exports = mongoose.model('Secret', SecretSchema);
+module.exports = Secret;

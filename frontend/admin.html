@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Login | AlexDevs</title>
+  <title>Admin Login | DevsAlex</title>
   <link rel="stylesheet" href="login.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="logo.png">
 </head>
 <body>
   <!-- Back to home button -->
@@ -63,6 +66,7 @@
     </form>
   </div>
 
+  <script src="config.js"></script>
   <script>
     // Password Visibility Toggle Logic
     const setupToggle = (btnId, inputId) => {
@@ -108,7 +112,7 @@
         // Small strategic delay for "security processing" feel
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-        const response = await fetch('http://localhost:5000/api/admin/login', {
+        const response = await fetch(getApiUrl('api/admin/login'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password, secretKey })

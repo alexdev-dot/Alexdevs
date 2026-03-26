@@ -50,7 +50,7 @@ const upload = multer({
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 });
+    const projects = await Project.findAll({ order: [['createdAt', 'DESC']] });
     res.json(projects);
   } catch (err) {
     res.status(500).send('Server Error');
@@ -78,15 +78,14 @@ router.post('/', [auth, upload.single('image')], async (req, res) => {
   }
 
   try {
-    const newProject = new Project({ 
+    const newProject = await Project.create({ 
       title, 
       description, 
       image: imagePath, 
       link, 
       tech: tech ? tech.split(',').map(t => t.trim()) : [] // Handle tech as string from FormData
     });
-    const project = await newProject.save();
-    res.json(project);
+    res.json(newProject);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
@@ -100,7 +99,7 @@ router.put('/:id', [auth, upload.single('image')], async (req, res) => {
   const { title, description, link, tech, existingImage } = req.body;
   
   try {
-    let project = await Project.findById(req.params.id);
+    let project = await Project.findByPk(req.params.id);
     if (!project) return res.status(404).json({ msg: 'Project not found' });
 
     project.title = title || project.title;
@@ -133,10 +132,10 @@ router.put('/:id', [auth, upload.single('image')], async (req, res) => {
 // @access  Private (Admin)
 router.delete('/:id', auth, async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id);
+    const project = await Project.findByPk(req.params.id);
     if (!project) return res.status(404).json({ msg: 'Project not found' });
 
-    await Project.findByIdAndDelete(req.params.id);
+    await project.destroy();
     res.json({ msg: 'Project removed' });
   } catch (err) {
     res.status(500).send('Server Error');

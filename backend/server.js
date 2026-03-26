@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const sequelize = require('./config/database');
 const cors = require("cors");
 const dotenv = require("dotenv");
 
@@ -8,7 +8,25 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // In development, allow localhost
+    if (process.env.NODE_ENV !== 'production') {
+      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return callback(null, true);
+      }
+    }
+    
+    // In production, allow same origin and any deployed frontend
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token']
+}));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -21,13 +39,12 @@ app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/newsletter", require("./routes/newsletterRoutes"));
 
 // Database Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
+sequelize.sync()
+  .then(() => console.log("✅ MySQL Database Connected & Synced"))
   .catch((err) => {
-    console.log("❌ MongoDB Connection Error:", err.message);
+    console.log("❌ MySQL Connection Error:", err.message);
     console.log(
-      "Ensure MongoDB is running locally on port 27017 or update MONGO_URI in .env"
+      "Ensure MySQL is running locally and update MYSQL_URL in .env"
     );
   });
 

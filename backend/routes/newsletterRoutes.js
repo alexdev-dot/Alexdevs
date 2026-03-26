@@ -35,7 +35,7 @@ router.post("/subscribe", async (req, res) => {
 
     // Check for duplicate email in DB
     const existingSubscriber = await Subscriber.findOne({
-      email: normalizedEmail,
+      where: { email: normalizedEmail },
     });
 
     if (existingSubscriber) {
@@ -66,7 +66,7 @@ router.post("/subscribe", async (req, res) => {
       success: true,
       message: "Successfully subscribed to newsletter!",
       data: {
-        id: saved._id,
+        id: saved.id,
         email: saved.email,
         subscribedAt: saved.subscribedAt,
       },
@@ -83,9 +83,10 @@ router.post("/subscribe", async (req, res) => {
 // GET /api/newsletter/subscribers (Admin endpoint - protected in production)
 router.get("/subscribers", async (req, res) => {
   try {
-    const subs = await Subscriber.find()
-      .sort({ subscribedAt: -1 })
-      .select("email subscribedAt read");
+    const subs = await Subscriber.findAll({
+      order: [['subscribedAt', 'DESC']],
+      attributes: ['id', 'email', 'subscribedAt', 'read']
+    });
     res.status(200).json({
       success: true,
       message: "Subscribers retrieved successfully",
@@ -117,11 +118,11 @@ router.delete("/unsubscribe", async (req, res) => {
 
     const normalizedEmail = email.toLowerCase().trim();
 
-    const deleted = await Subscriber.findOneAndDelete({
-      email: normalizedEmail,
+    const deleted = await Subscriber.destroy({
+      where: { email: normalizedEmail },
     });
 
-    if (!deleted) {
+    if (deleted === 0) {
       return res.status(404).json({
         success: false,
         message: "Email not found in subscription list",
@@ -146,7 +147,7 @@ router.delete("/unsubscribe", async (req, res) => {
 // Toggle read/unread for a subscriber (Admin)
 router.put("/subscribers/:id/read", async (req, res) => {
   try {
-    const sub = await Subscriber.findById(req.params.id);
+    const sub = await Subscriber.findByPk(req.params.id);
     if (!sub)
       return res
         .status(404)
@@ -158,7 +159,7 @@ router.put("/subscribers/:id/read", async (req, res) => {
       .json({
         success: true,
         message: "Toggled read",
-        data: { id: sub._id, read: sub.read },
+        data: { id: sub.id, read: sub.read },
       });
   } catch (err) {
     console.error(err);

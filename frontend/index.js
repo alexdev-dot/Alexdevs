@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   const fetchProjects = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/projects');
+      const response = await fetch(getApiUrl('api/projects'));
       const projects = await response.json();
       
       if (projects.length > 0) {
@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       try {
-        const res = await fetch('http://localhost:5000/api/contact', {
+        const res = await fetch(getApiUrl('api/contact'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
@@ -405,7 +405,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         // Send subscription request to backend
-        const response = await fetch('http://localhost:5000/api/newsletter/subscribe', {
+        const response = await fetch(getApiUrl('api/newsletter/subscribe'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

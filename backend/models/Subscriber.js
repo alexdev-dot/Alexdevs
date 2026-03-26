@@ -1,16 +1,32 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const SubscriberSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
+const Subscriber = sequelize.define('Subscriber', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
   },
-  subscribedAt: { type: Date, default: Date.now },
-  ip: { type: String },
-  read: { type: Boolean, default: false },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true
+    }
+  },
+  subscribedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  ip: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  read: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
 });
 
-module.exports = mongoose.model("Subscriber", SubscriberSchema);
+module.exports = Subscriber;

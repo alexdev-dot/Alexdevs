@@ -4,7 +4,7 @@ const sendOTPBtn = document.getElementById('sendOTPBtn');
 const forgotForm = document.getElementById('forgotForm');
 const statusMsg = document.getElementById('statusMsg');
 
-const API_URL = 'http://localhost:5000/api/auth';
+const API_URL = getApiUrl('api/auth');
 
 // Step 1: Request OTP
 sendOTPBtn.addEventListener('click', async () => {

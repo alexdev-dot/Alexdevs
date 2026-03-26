@@ -21,7 +21,7 @@ if (registerForm) {
     const email = document.getElementById('reg_email').value;
     const password = document.getElementById('reg_password').value;
     try {
-        const response = await fetch('http://localhost:5000/api/auth/register', {
+        const response = await fetch(getApiUrl('api/auth/register'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fullname, email, password })
@@ -42,7 +42,7 @@ if (registerForm) {
 
 // Google Handler (Shared)
 window.handleCredentialResponse = function(response) {
-    fetch('http://localhost:5000/google-login', {
+    fetch(getApiUrl('google-login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: response.credential })

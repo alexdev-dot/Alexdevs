@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/projects";
+const API_URL = getApiUrl('api/projects');
 const token = localStorage.getItem("adminToken");
 
 if (!token) {
@@ -14,7 +14,7 @@ const refreshToken = async () => {
     const currentToken = localStorage.getItem("adminToken");
     if (!currentToken) return;
 
-    const res = await fetch("http://localhost:5000/api/admin/refresh", {
+    const res = await fetch(getApiUrl('api/admin/refresh'), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -199,7 +199,7 @@ fetchProjects();
 // --------------------------
 // Subscribers Handling + Socket.IO + Badge
 // --------------------------
-const NEWSLETTER_API = "http://localhost:5000/api/newsletter";
+const NEWSLETTER_API = getApiUrl('api/newsletter');
 const subscribersList = document.getElementById("subscribersList");
 const subBadge = document.getElementById("subBadge");
 
@@ -321,7 +321,7 @@ const showSection = (section, el) => {
 // --------------------------
 // Contact / Messages Handling
 // --------------------------
-const CONTACT_API = "http://localhost:5000/api/contact";
+const CONTACT_API = getApiUrl('api/contact');
 const messagesList = document.getElementById("messagesList");
 const replyModal = document.getElementById("replyModal");
 const replyForm = document.getElementById("replyForm");
@@ -472,7 +472,7 @@ replyForm.addEventListener("submit", async (e) => {
 // Socket.IO client (realtime subscriber pushes)
 let socket;
 try {
-  socket = io("http://localhost:5000");
+  socket = io(getSocketUrl() || 'http://localhost:5000');
   socket.on("newsletter:new", (sub) => {
     // Add to UI and update badge
     addSubscriberToUI(sub, true);

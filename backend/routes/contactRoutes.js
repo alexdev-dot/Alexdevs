@@ -25,8 +25,7 @@ const auth = (req, res, next) => {
 router.post("/", async (req, res) => {
   const { name, email, message } = req.body;
   try {
-    const newContact = new Contact({ name, email, message });
-    await newContact.save();
+    const newContact = await Contact.create({ name, email, message });
 
     // Emit a socket event so connected admin dashboards can receive the message in real-time
     try {
@@ -49,7 +48,7 @@ router.post("/", async (req, res) => {
 // @access  Private (Admin)
 router.get("/", auth, async (req, res) => {
   try {
-    const messages = await Contact.find().sort({ createdAt: -1 });
+    const messages = await Contact.findAll({ order: [['createdAt', 'DESC']] });
     res.json(messages);
   } catch (err) {
     console.error(err.message);
@@ -62,7 +61,7 @@ router.get("/", auth, async (req, res) => {
 // @access  Private (Admin)
 router.put("/:id/read", auth, async (req, res) => {
   try {
-    const message = await Contact.findById(req.params.id);
+    const message = await Contact.findByPk(req.params.id);
     if (!message) return res.status(404).json({ msg: "Message not found" });
 
     message.read = !message.read; // toggle
@@ -79,10 +78,10 @@ router.put("/:id/read", auth, async (req, res) => {
 // @access  Private (Admin)
 router.delete("/:id", auth, async (req, res) => {
   try {
-    const message = await Contact.findById(req.params.id);
+    const message = await Contact.findByPk(req.params.id);
     if (!message) return res.status(404).json({ msg: "Message not found" });
 
-    await Contact.findByIdAndDelete(req.params.id);
+    await message.destroy();
     res.json({ msg: "Message removed" });
   } catch (err) {
     console.error(err.message);
@@ -119,7 +118,7 @@ router.post("/reply", auth, async (req, res) => {
     await transporter.sendMail(mailOptions);
 
     // 3. Mark as Replied in DB
-    const contact = await Contact.findById(id);
+    const contact = await Contact.findByPk(id);
     if (contact) {
       contact.replied = true;
       contact.read = true; // Auto mark read if replied

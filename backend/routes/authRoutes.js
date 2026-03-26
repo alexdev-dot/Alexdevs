@@ -19,10 +19,10 @@ const transporter = nodemailer.createTransport({
 router.post('/register', async (req, res) => {
   const { fullname, email, password } = req.body;
   try {
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ where: { email } });
     if (user) return res.status(400).json({ msg: 'User already exists' });
 
-    user = new User({ fullname, email, password });
+    user = await User.create({ fullname, email, password });
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
     await user.save();
@@ -39,7 +39,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ where: { email } });
     if (!user) return res.status(400).json({ msg: 'Invalid Credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -57,13 +57,13 @@ router.post('/login', async (req, res) => {
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
     if (!user) return res.status(404).json({ msg: 'User not found' });
 
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     user.resetOTP = otp;
-    user.resetOTPExpires = Date.now() + 3600000; // 1 hour
+    user.resetOTPExpires = new Date(Date.now() + 3600000); // 1 hour
     await user.save();
 
     // Send Email
@@ -91,9 +91,11 @@ router.post('/reset-password', async (req, res) => {
   const { email, otp, newPassword } = req.body;
   try {
     const user = await User.findOne({ 
-      email, 
-      resetOTP: otp, 
-      resetOTPExpires: { $gt: Date.now() } 
+      where: { 
+        email, 
+        resetOTP: otp,
+        resetOTPExpires: { [require('sequelize').Op.gt]: new Date() }
+      }
     });
 
     if (!user) return res.status(400).json({ msg: 'Invalid or expired OTP' });
@@ -101,8 +103,8 @@ router.post('/reset-password', async (req, res) => {
     // Hash new password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
-    user.resetOTP = undefined;
-    user.resetOTPExpires = undefined;
+    user.resetOTP = null;
+    user.resetOTPExpires = null;
     await user.save();
 
     res.json({ msg: 'Password reset successful' });
